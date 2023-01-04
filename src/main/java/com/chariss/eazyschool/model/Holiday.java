@@ -1,4 +1,4 @@
-package com.eazybytes.eazyschool.model;
+package com.chariss.eazyschool.model;
 
 import lombok.Data;
 

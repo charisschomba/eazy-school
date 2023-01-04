@@ -1,6 +1,6 @@
-package com.eazybytes.eazyschool.controller;
+package com.chariss.eazyschool.controller;
 
-import com.eazybytes.eazyschool.model.Holiday;
+import com.chariss.eazyschool.model.Holiday;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

@@ -1,4 +1,4 @@
-package com.eazybytes.eazyschool.config;
+package com.chariss.eazyschool.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,7 +9,7 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-public class ProjectSecurityConfig  {
+public class ProjectSecurityConfig {
 
     /**
      * From Spring Security 5.7, the WebSecurityConfigurerAdapter is deprecated to encourage users
@@ -22,9 +22,10 @@ public class ProjectSecurityConfig  {
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
 
-            http.csrf().disable()
+            http.csrf().ignoringAntMatchers("/saveMsg").ignoringAntMatchers("/h2-console/**").and()
                 .authorizeRequests()
                 .mvcMatchers("/dashboard").authenticated()
+                .mvcMatchers("/displayMessages").hasRole("ADMIN")
                 .mvcMatchers("/home").permitAll()
                 .mvcMatchers("/holidays/**").permitAll()
                 .mvcMatchers("/contact").permitAll()
@@ -35,9 +36,14 @@ public class ProjectSecurityConfig  {
                 .and().formLogin().loginPage("/login")
                 .defaultSuccessUrl("/dashboard").failureUrl("/login?error=true").permitAll()
                 .and().logout().logoutSuccessUrl("/login?logout=true").invalidateHttpSession(true).permitAll()
+                .and().authorizeRequests().antMatchers("/h2-console/**").permitAll()
+                .and().authorizeRequests().antMatchers("/h2-console/**").permitAll()
                 .and().httpBasic();
 
+            http.headers().frameOptions().disable();
+
             return http.build();
+
     }
 
     @Bean
@@ -50,19 +56,10 @@ public class ProjectSecurityConfig  {
                 .build();
         UserDetails user = User.withDefaultPasswordEncoder()
                 .username("admin")
-                .password("54321")
-                .roles("USER","ADMIN")
+                .password("12345")
+                .roles("ADMIN")
                 .build();
         return new InMemoryUserDetailsManager(user, admin);
     }
-
-   /* @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("user").password("12345").roles("USER")
-                .and()
-                .withUser("admin").password("54321").roles("USER", "ADMIN")
-                .and().passwordEncoder(NoOpPasswordEncoder.getInstance());
-    }*/
 
 }

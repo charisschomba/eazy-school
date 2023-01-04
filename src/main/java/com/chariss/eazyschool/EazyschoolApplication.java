@@ -1,4 +1,4 @@
-package com.eazybytes.eazyschool;
+package com.chariss.eazyschool;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

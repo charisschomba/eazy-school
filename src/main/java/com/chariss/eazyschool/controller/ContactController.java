@@ -1,9 +1,10 @@
-package com.eazybytes.eazyschool.controller;
+package com.chariss.eazyschool.controller;
 
-import com.eazybytes.eazyschool.model.Contact;
-import com.eazybytes.eazyschool.service.ContactService;
+import com.chariss.eazyschool.model.Contact;
+import com.chariss.eazyschool.service.ContactService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -16,6 +17,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 
+import java.util.List;
+
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Slf4j
@@ -48,14 +52,27 @@ public class ContactController {
 
     @RequestMapping(value = "/saveMsg",method = POST)
     public String saveMessage(@Valid @ModelAttribute("contact") Contact contact, Errors errors) {
+        log.info(contact.getMessage());
         if(errors.hasErrors()){
             log.error("Contact form validation failed due to : " + errors.toString());
             return "contact.html";
         }
         contactService.saveMessageDetails(contact);
-        contactService.setCounter(contactService.getCounter()+1);
-        log.info("Number of times the Contact form is submitted : "+contactService.getCounter());
         return "redirect:/contact";
+    }
+
+    @RequestMapping("/displayMessages")
+    public ModelAndView displayMessages(Model model) {
+        List<Contact> contactMsgs = contactService.findMsgsWithOpenStatus();
+        ModelAndView modelAndView = new ModelAndView("messages.html");
+        modelAndView.addObject("contactMsgs",contactMsgs);
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/closeMsg",method = GET)
+    public String closeMsg(@RequestParam int id, Authentication authentication) {
+        contactService.updateMsgStatus(id,authentication.getName());
+        return "redirect:/displayMessages";
     }
 
 
