@@ -1,8 +1,9 @@
-package com.chariss.eazyschool.model;
+package com.eazybytes.eazyschool.model;
 
-import jakarta.validation.constraints.*;
 import lombok.Data;
+import org.hibernate.validator.constraints.CreditCardNumber;
 
+import javax.validation.constraints.*;
 
 /*
 @Data annotation is provided by Lombok library which generates getter, setter,
