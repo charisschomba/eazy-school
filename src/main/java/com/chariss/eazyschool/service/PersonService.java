@@ -7,6 +7,7 @@ import com.chariss.eazyschool.repository.PersonRepository;
 import com.chariss.eazyschool.repository.RolesRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -16,12 +17,15 @@ public class PersonService {
     RolesRepository rolesRepository;
     @Autowired
     PersonRepository personRepository;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     public boolean createNewPerson(Person person) {
         boolean isSaved = false;
 
         Roles role = rolesRepository.getByRoleName(EazySchoolConstants.STUDENT_ROLE);
         person.setRoles(role);
+        person.setPwd(passwordEncoder.encode(person.getPwd()));
         person = personRepository.save(person);
         if(person != null && person.getPersonId() > 0) {
             isSaved = true;

@@ -1,6 +1,9 @@
 package com.chariss.eazyschool.controller;
 
+import com.chariss.eazyschool.model.Person;
+import com.chariss.eazyschool.repository.PersonRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -12,14 +15,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @Slf4j
 @Controller
 public class DashboardController {
 
+    @Autowired
+    PersonRepository personRepository;
+
     @RequestMapping("/dashboard")
-    public String displayDashboard(Model model,Authentication authentication) {
-        model.addAttribute("username", authentication.getName());
+    public String displayDashboard(Model model, Authentication authentication, HttpSession session) {
+        Person person = personRepository.readByEmail(authentication.getName());
+        model.addAttribute("username", person.getName());
+        session.setAttribute("loggedInPerson", person);
         model.addAttribute("roles", authentication.getAuthorities().toString());
         return "dashboard.html";
     }
