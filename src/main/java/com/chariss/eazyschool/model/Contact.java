@@ -1,5 +1,6 @@
 package com.chariss.eazyschool.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
@@ -18,6 +19,7 @@ public class Contact extends com.chariss.eazyschool.model.BaseEntity {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     @Column(name="contact_id")
+    @JsonProperty("Id")
     private int contactId;
 
     /*
@@ -31,6 +33,7 @@ public class Contact extends com.chariss.eazyschool.model.BaseEntity {
 
     @NotBlank(message="Mobile number must not be blank")
     @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
+    @JsonProperty("mobileNumber")
     private String mobileNum;
 
     @NotBlank(message="Email must not be blank")

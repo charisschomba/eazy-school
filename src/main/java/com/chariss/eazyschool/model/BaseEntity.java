@@ -1,5 +1,6 @@
 package com.chariss.eazyschool.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -25,8 +26,10 @@ public class BaseEntity {
     private String createdBy;
     @LastModifiedDate
     @Column(insertable = false)
+    @JsonIgnore
     private LocalDateTime updatedAt;
     @LastModifiedBy
     @Column(insertable = false)
+    @JsonIgnore
     private String updatedBy;
 }
