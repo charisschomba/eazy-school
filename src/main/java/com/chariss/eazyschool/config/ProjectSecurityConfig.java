@@ -32,7 +32,7 @@ public class ProjectSecurityConfig {
                 .mvcMatchers("/displayProfile").authenticated()
                 .mvcMatchers("/updateProfile").authenticated()
                 .mvcMatchers("/student/**").hasRole("STUDENT")
-                .mvcMatchers("/displayMessages").hasRole("ADMIN")
+                .mvcMatchers("/displayMessages/**").hasRole("ADMIN")
                 .mvcMatchers("/displayClasses").hasRole("ADMIN")
                 .mvcMatchers("/displayStudents").hasRole("ADMIN")
                 .mvcMatchers("/displayCourses").hasRole("ADMIN")

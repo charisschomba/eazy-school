@@ -1,6 +1,8 @@
 package com.chariss.eazyschool.repository;
 
 import com.chariss.eazyschool.model.Contact;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,4 +16,6 @@ DB related operations and
 @Repository
 public interface ContactRepository extends CrudRepository<Contact, Integer> {
     List<Contact> findByStatus(String status);
+
+    Page<Contact> findByStatus(String status, Pageable pegeable);
 }
