@@ -4,6 +4,7 @@ import com.chariss.eazyschool.annotation.FieldsValueMatch;
 import com.chariss.eazyschool.annotation.PasswordValidator;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
