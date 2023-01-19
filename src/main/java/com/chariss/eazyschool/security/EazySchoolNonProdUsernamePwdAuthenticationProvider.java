@@ -19,23 +19,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-@Profile("prod")
-public class EazySchoolUsernamePasswordAuthenticationProvider
-implements AuthenticationProvider {
+@Profile("!prod")
+public class EazySchoolNonProdUsernamePwdAuthenticationProvider
+        implements AuthenticationProvider
+{
     @Autowired
     private PersonRepository personRepository;
+
     @Autowired
-    PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public Authentication authenticate(Authentication authentication)
             throws AuthenticationException {
         String email = authentication.getName();
         String pwd = authentication.getCredentials().toString();
         Person person = personRepository.readByEmail(email);
-        if(person != null && person.getPersonId() > 0 && passwordEncoder.matches(pwd, person.getPwd())) {
-            return  new UsernamePasswordAuthenticationToken(email, null, getGrantedAuthorities(person.getRoles()));
-        } else {
-            throw new BadCredentialsException("Invalid Credentials");
+        if(null != person && person.getPersonId()>0){
+            return new UsernamePasswordAuthenticationToken(
+                    email, null, getGrantedAuthorities(person.getRoles()));
+        }else{
+            throw new BadCredentialsException("Invalid credentials!");
         }
     }
 
@@ -49,4 +53,6 @@ implements AuthenticationProvider {
     public boolean supports(Class<?> authentication) {
         return authentication.equals(UsernamePasswordAuthenticationToken.class);
     }
+
 }
+
