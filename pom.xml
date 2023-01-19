@@ -11,7 +11,8 @@
 	<groupId>com.eazybytes</groupId>
 	<artifactId>com.chariss</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>eazy-school</name>
+	<packaging>jar</packaging>
+	<name>eazyschool</name>
 	<description>Eazy School Web Application</description>
 	<properties>
 		<java.version>19</java.version>

@@ -7,25 +7,18 @@ import org.springframework.core.env.Environment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @Slf4j
 @Controller
 public class DashboardController {
 
-    @Value("${eazzySchool.pageSize}")
+    @Value("${eazyschool.pageSize}")
     private int defaultPageSize;
-    @Value("${eazzySchool.contact.successMsg}")
+    @Value("${eazyschool.contact.successMsg}")
     private String message;
     @Autowired
     PersonRepository personRepository;
@@ -35,7 +28,6 @@ public class DashboardController {
 
     @RequestMapping("/dashboard")
     public String displayDashboard(Model model, Authentication authentication, HttpSession session) {
-        logMessages();
         Person person = personRepository.readByEmail(authentication.getName());
         model.addAttribute("username", person.getName());
         model.addAttribute("roles", authentication.getAuthorities().toString());
@@ -45,10 +37,4 @@ public class DashboardController {
         session.setAttribute("loggedInPerson", person);
         return "dashboard.html";
     }
-    public void logMessages() {
-        log.info(environment.getProperty("eazzySchool.pageSize"));
-        log.info(environment.getProperty("eazzySchool.contact.successMsg"));
-        log.info(environment.getProperty("JAVA_HOME"));
-    }
-
 }
