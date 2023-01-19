@@ -1,5 +1,6 @@
 package com.chariss.eazyschool.service;
 
+import com.chariss.eazyschool.config.EazySchoolProps;
 import com.chariss.eazyschool.constants.EazySchoolConstants;
 import com.chariss.eazyschool.model.Contact;
 import com.chariss.eazyschool.repository.ContactRepository;
@@ -26,6 +27,9 @@ public class ContactService {
     @Autowired
     private ContactRepository contactRepository;
 
+    @Autowired
+    EazySchoolProps eazySchoolProps;
+
     /**
      * Save Contact Details into DB
      * @param contact
@@ -42,7 +46,10 @@ public class ContactService {
     }
 
     public Page<Contact> findMsgsWithOpenStatus(int pageNum, String sortField, String sortDir){
-        int pageSize = 5;
+        int pageSize = eazySchoolProps.getPageSize();
+        if(eazySchoolProps.getContact() != null && eazySchoolProps.getContact().get("pageSize") != null){
+            pageSize = Integer.parseInt(eazySchoolProps.getContact().get("pageSize").trim());
+        }
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize,
                 sortDir.equals("asc") ? Sort.by(sortField).ascending()
                         : Sort.by(sortField).descending());

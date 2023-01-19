@@ -3,7 +3,9 @@ package com.chariss.eazyschool.controller;
 import com.chariss.eazyschool.model.Person;
 import com.chariss.eazyschool.repository.PersonRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.env.Environment;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -21,11 +23,19 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class DashboardController {
 
+    @Value("${eazzySchool.pageSize}")
+    private int defaultPageSize;
+    @Value("${eazzySchool.contact.successMsg}")
+    private String message;
     @Autowired
     PersonRepository personRepository;
 
+    @Autowired
+    private Environment environment;
+
     @RequestMapping("/dashboard")
     public String displayDashboard(Model model, Authentication authentication, HttpSession session) {
+        logMessages();
         Person person = personRepository.readByEmail(authentication.getName());
         model.addAttribute("username", person.getName());
         model.addAttribute("roles", authentication.getAuthorities().toString());
@@ -34,6 +44,11 @@ public class DashboardController {
         }
         session.setAttribute("loggedInPerson", person);
         return "dashboard.html";
+    }
+    public void logMessages() {
+        log.info(environment.getProperty("eazzySchool.pageSize"));
+        log.info(environment.getProperty("eazzySchool.contact.successMsg"));
+        log.info(environment.getProperty("JAVA_HOME"));
     }
 
 }
